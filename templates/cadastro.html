@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"  type="text/css" href="{{url_for('.static', filename='/assets/css/estiloCadastro.css')}}">
+    <title>Formulário</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-image">
+            <img src="{{ url_for('static', filename='images/undraw_Forgot_password_re_hxwm.png') }}" alt="">
+             
+        </div>
+        <div class="form">
+            <form action="#"method="POST">
+                <div class="form-header">
+                    <div class="title">
+                        <h1>Cadastre-se</h1>
+                    </div>
+                    <div class="login-button">
+                        <button><a href="{{ url_for('login') }}">Login</a></button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-box">
+                        <label for="firstname">Primeiro Nome</label>
+                        <input id="firstname" type="text" name="firstname" placeholder="Digite seu primeiro nome" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="lastname">Sobrenome</label>
+                        <input id="lastname" type="text" name="lastname" placeholder="Digite seu sobrenome" required>
+                    </div>
+                    <div class="input-box">
+                        <label for="email">E-mail</label>
+                        <input id="email" type="email" name="email" placeholder="Digite seu e-mail" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="number">Celular</label>
+                        <input id="number" type="tel" name="number" placeholder="(xx) xxxx-xxxx" required oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                        
+                    </div>
+
+                    <div class="input-box">
+                        <label for="password">Senha</label>
+                        <span class="btn-show-pass" onclick="toggleConfirmPasswordVisibility()">
+                            <i class="zmdi zmdi-eye"></i>
+                        </span>
+                        <input id="password" type="password" name="password" placeholder="Digite sua senha" required oninput="validatePassword()" >
+                        
+                    </div>
+
+
+                    <div class="input-box">
+                        <label for="confirmPassword">Confirme sua Senha</label>
+                        <span class="btn-show-pass" onclick="toggleConfirmPasswordVisibility()">
+                            <i class="zmdi zmdi-eye"></i>
+                        </span>
+                        <input id="confirmPassword" type="password" name="confirmPassword" placeholder="Digite sua senha novamente" required oninput="validatePassword()">
+                    </div>
+
+                </div>
+
+                <div class="gender-inputs">
+                    <div class="gender-title">
+                        <h6>Gênero</h6>
+                    </div>
+
+                    <div class="gender-group">
+                        <div class="gender-input">
+                            <input id="female" type="radio" name="gender"required>
+                            <label for="female">Feminino</label>
+                        </div>
+
+                        <div class="gender-input">
+                            <input id="male" type="radio" name="gender"required>
+                            <label for="male">Masculino</label>
+                        </div>
+
+                        <div class="gender-input">
+                            <input id="others" type="radio" name="gender"required>
+                            <label for="others">Outros</label>
+                        </div>
+
+                        <div class="gender-input">
+                            <input id="none" type="radio" name="gender"required>
+                            <label for="none">Prefiro não dizer</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="continue-button">
+                    <button id="continuar"><a href="#">Continuar</a> </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+<script>
+                        /*oninput="this.value = this.value.replace(/[^0-9]/g, '');
+                       " garante que apenas números sejam permitidos no campo de entrada, removendo qualquer caractere não numérico*/
+
+
+            /*validações a serem feitas*/
+        /*campo selecionar obrigatorio no radio de genero - feito
+          apenas números em telefone - feito
+          
+          senha com mais de 6 digitos e com caracteres especiais
+          proibir espaço em senhas */
+          
+    
+    pNome=document.getElementById("firstname")
+    sNome=document.getElementById("lastname")
+    email=document.getElementById("email")
+    telefone=document.getElementById("number")
+    senha=document.getElementById("password")
+    cSenha=document.getElementById("confirmPassword")
+    btenviar=document.getElementById("continuar")
+            
+
+    function toggleConfirmPasswordVisibility() {
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const eyeIcon = confirmPasswordInput.previousElementSibling.firstElementChild;
+    
+        if (confirmPasswordInput.type === "password") {
+            confirmPasswordInput.type = "text";
+            eyeIcon.classList.remove("zmdi-eye");
+            eyeIcon.classList.add("zmdi-eye-off");
+        } else {
+            confirmPasswordInput.type = "password";
+            eyeIcon.classList.remove("zmdi-eye-off");
+            eyeIcon.classList.add("zmdi-eye");
+        }
+    }
+
+    function validatePassword() {
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        // Verificar se as senhas são iguais
+        if (password != confirmPassword) {
+            confirmPasswordInput.setCustomValidity('As senhas não coincidem.');
+        } else {
+            confirmPasswordInput.setCustomValidity('');
+        }
+
+        // Verificar se a senha atende aos critérios
+        const isValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+
+        // Atualizar a aparência do campo com base na validação
+        passwordInput.setCustomValidity(isValid ? '' : 'A senha deve conter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas e caracteres especiais.');
+    }
+
+
+
+</script>
+</body>
+
+</html>

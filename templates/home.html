@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1311119c;
+        }
+        .Section_serviços {
+            display: flex;
+            flex-direction: column; /* Ajuste para uma disposição vertical dos itens */
+            align-items: flex-end;
+            height: 100vh; /* Garante que a altura da Section_serviços ocupe 100% da altura da viewport */
+        }
+        
+        .serviço1,.serviço2,.serviço3,.serviço4 {
+            font-size: 1vw; /* Exemplo de tamanho de fonte responsivo */
+            
+            background-color: #333333bd;
+            border: 2px solid #000;
+            padding: 5%;
+            width: 16.6vw;
+            height: 7vh;
+            border-radius: 3%;
+            margin-bottom: 10px; /* Substitui margin-right para espaçamento entre as divs */
+            flex: 1;
+        }
+        .serviço1:hover,.serviço2:hover,.serviço3:hover,.serviço4:hover {
+            background-color: #333333bd;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(37, 37, 37, 0.541);
+        }
+        
+        
+        /* Menu lateral e seus componentes */
+        #menu-lateral {
+            width: 100%;
+            max-width: 20%;
+            background-color: #494949;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding-top: 20px;
+            z-index: 1;
+            height: 100%;
+            overflow-y: auto;
+        }
+        /*Foto do perfil no menu lateral*/
+       
+        #perfil img {
+            position: relative;
+            left: 10% ;
+            top:80px ;
+            border-radius: 50%;
+            width: 200px;
+            height: 20%;
+        }
+        /*area reservada ao nome do usuário*/
+       
+        #perfil p {
+            position: absolute;
+            left: 90px ;
+            top:40px ;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        .nomeEmail{
+            position: absolute;
+            left: 90px ;
+            top:40px ;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        /*prompt para input do usuário*/
+        #prompt-container1{
+            position: fixed;
+            top: 90%;
+            left:60%;
+            transform: translate(-50%, -50%);
+            background-color: #3b3a3a;
+            padding: 5px;
+            width: 70%;
+            display: none;
+            border-radius: 10px;
+        }
+        
+
+        #prompt-container2{
+            position: fixed;
+            top: 90%;
+            left:60%;
+            transform: translate(-50%, -50%);
+            background-color: #4012ac;
+            padding: 5px;
+            width: 70%;
+            display: none;
+            border-radius: 10px;
+        }
+
+
+        #prompt-container3{
+            position: fixed;
+            top: 90%;
+            left:60%;
+            transform: translate(-50%, -50%);
+            background-color: #1612ace8;
+            padding: 5px;
+            width: 70%;
+            display: none;
+            border-radius: 10px;
+        }
+
+        #prompt-container4{
+            position: fixed;
+            top: 90%;
+            left:60%;
+            transform: translate(-50%, -50%);
+            background-color: #1b1a1a;
+            padding: 5px;
+            width: 70%;
+            display: none;
+            border-radius: 10px;
+        }
+        /*campo de input*/
+        input#userInput,input#userInput2,input#userInput3,input#userInput4 {
+            position: relative;
+            padding: 20px;
+            width: 86%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 1px;
+            overflow-y:hidden;
+            overflow-x: auto;
+            border: 1px solid #ccc;
+            
+        }
+
+        #quantidadePalavras1,#quantidadePalavras2,#quantidadePalavras3,#quantidadePalavras4{
+            border-radius: 5px;
+            position: relative;
+            margin-top: 2px;
+            background-color: #0000009c;
+        }
+       
+        /*caixa de testo reservada para a api*/
+        textarea#areaTexto {
+            position: relative;
+            left: 7% ;
+            top:1px ;
+            width:900px;
+            height: 500px;
+            padding: 10px;
+            border: 2px solid #3b3a3a;
+            border-radius: 5px;
+            align-content: last baseline;
+            resize: none; /* Impede o redimensionamento pelo usuário */
+            overflow-y: scroll;
+ 
+ 
+        }
+        #conteudo {
+            margin-left: 250px; /* Ajuste para coincidir com a largura do menu lateral */
+            padding: 16px;
+            color: rgb#9c9c9c;
+        }
+        /*quanto inferior direito*/    
+        button#btEnviar,button#btEnviar2,button#btEnviar3,button#btEnviar4{
+            float: right;
+            width: 80px;
+            height: 80px;
+            background-color: #1b1a1a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        /* Estilo para a tela de carregamento */
+        #loading-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+   
+    <div id="menu-lateral">
+       
+        <div id="perfil">
+            <img src="{{ url_for('static', filename='images/fotoPerfil.jpg') }}" alt="Foto de Perfil">
+            
+            
+            <p id="nomeEmail">{{ email }}</p>
+            
+        </div>
+<br>
+<br>
+<br>
+<br>
+<br>
+        <section id="Section_serviços">
+        
+            <div id="serviços">
+                <section id="servi" class="groupServiços">
+						
+                    <section class="serviço1">
+                        <div class="plans1">
+                            <div class="head_title">Serviço 1</div>
+                            <p class="head_subtitle">conteúdo: função A
+                        </div>
+                    </section>
+
+                    <section class="serviço2">
+                        <div class="plans2">
+                            <div class="head_title">Serviço 2</div>
+                            <p class="head_subtitle">conteúdo: função B
+                        </div>
+                    </section>
+
+                    <section class="serviço3">
+                        <div class="plans3">
+                            <div class="head_title">Serviço 3</div>
+                            <p class="head_subtitle">conteúdo: função C
+                        </div>
+                    </section>
+
+                    <section class="serviço4">
+                        <div class="plans4">
+                            <div class="head_title">Serviço 4</div>
+                            <p class="head_subtitle">conteúdo: função D
+                        </div>
+                    </section>
+            </div>
+        </section>
+    </div>
+ 
+    <div id="conteudo">
+       
+        <textarea id="areaTexto"></textarea>
+    </div>
+ 
+    <div id="prompt-container1">
+        <label for="userInput"></label>
+        <input type="text" style="opacity: 0.5"; id="userInput" placeholder="Escreva a descrição do seu projeto para criar um texto">
+        <button id= "btEnviar" onclick="submitPrompt()">>></button>
+        <input  type="number" id="quantidadePalavras1" class="quantidadePalavras1" placeholder="Quantidade de palavras"oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+    </div>
+
+    <div id="prompt-container2">
+        <label for="userInput2"></label>
+        <input type="text" style="opacity: 0.5"; id="userInput2" placeholder="Escreva a descrição do seu projeto para criar um texto">
+        <button id= "btEnviar2" onclick="submitPrompt()">>></button>
+        <input  type="number" id="quantidadePalavras2" class="quantidadePalavras2" placeholder="Quantidade de palavras"oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+
+    </div>
+
+    <div id="prompt-container3">
+        <label for="userInput3"></label>
+        <input type="text" style="opacity: 0.5"; id="userInput3" placeholder="Escreva a descrição do seu projeto para criar um texto">
+        <button id= "btEnviar3" onclick="submitPrompt()">>></button>
+        <input  type="number" id="quantidadePalavras3" class="quantidadePalavras3" placeholder="Quantidade de palavras"oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+
+    </div>
+
+    <div id="prompt-container4">
+        <label for="userInput4"></label>
+        <input type="text" style="opacity: 0.5"; id="userInput4" placeholder="Escreva a descrição do seu projeto para criar um texto">
+        <button id= "btEnviar4" onclick="submitPrompt()">>></button>
+        <input  type="number" id="quantidadePalavras4" class="quantidadePalavras4" placeholder="Quantidade de palavras"oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+
+    </div>
+
+
+    <div id="loading-screen">
+        <p>Carregando...</p>
+    </div>
+    <script>
+        // Adicione esta linha para exibir o prompt automaticamente
+        document.addEventListener('DOMContentLoaded', openPrompt);
+ 
+        var saida = document.getElementById("areaTexto")
+
+        var quantidadePalavras1 = document.getElementById("quantidadePalavras1")
+        var quantidadePalavras2 = document.getElementById("quantidadePalavras2")
+        var quantidadePalavras3 = document.getElementById("quantidadePalavras3")
+        var quantidadePalavras4 = document.getElementById("quantidadePalavras4")
+
+        var btEnviar = document.getElementById("btEnviar")
+        var btEnviar2 = document.getElementById("btEnviar2")
+        var btEnviar3 = document.getElementById("btEnviar3")
+        var btEnviar4 = document.getElementById("btEnviar4")
+
+        var userInput1 = document.getElementById("userInput")
+        var userInput2 = document.getElementById("userInput2")
+        var userInput3 = document.getElementById("userInput3")
+        var userInput4 = document.getElementById("userInput4")
+
+        
+        respostaAPI = "Reservada para api"
+ 
+
+        //Botão do prompt1
+
+
+btEnviar.addEventListener("click", () => {
+    // Obter valores dos inputs
+    var userInputValue = userInput1.value;
+    var quantidadePalavrasValue = quantidadePalavras1.value;
+
+    // Validar dados
+    if (userInputValue.trim() === "" || quantidadePalavrasValue.trim() === "") {
+        // Lógica para lidar com campos vazios
+        alert("Por favor, preencha todos os campos.");
+    } else if (isNaN(quantidadePalavrasValue)) {
+        // Lógica para lidar com quantidade de palavras inválida
+        alert("A quantidade de palavras não foi inserida corretamente.");
+    } else {
+        // Enviar dados para o Flask
+        fetch('/processar_dados', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userInput: userInputValue,
+                quantidadePalavras1: quantidadePalavrasValue
+                // Adicione mais campos conforme necessário
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Obter a resposta da API
+            var respostaAPI = data.response_message;
+
+            // Exibir a resposta na variável respostaAPI
+            console.log("Resposta da API:", respostaAPI);
+
+            // Exibir a resposta no campo de saída
+            saida.value += '\n' + "You: " + userInput1.value + '\n' + "A quantidade máxima de palavras foi de: " + quantidadePalavras1.value + '\n' + '\n' +"Resposta: " + respostaAPI + '\n';
+        })
+        .catch(error => {
+            console.error('Erro ao enviar dados para o Flask:', error);
+        });
+    }
+});
+
+ 
+//Botão do prompt2
+btEnviar2.addEventListener("click", () => {
+    // Obter valores dos inputs
+    var userInputValue2 = userInput2.value;
+    var quantidadePalavrasValue2 = quantidadePalavras2.value;
+
+    // Validar dados
+    if (userInputValue2.trim() === "" || quantidadePalavrasValue2.trim() === "") {
+        // Lógica para lidar com campos vazios
+        alert("Por favor, preencha todos os campos.");
+    } else if (isNaN(quantidadePalavrasValue2)) {
+        // Lógica para lidar com quantidade de palavras inválida
+        alert("A quantidade de palavras não foi inserida corretamente.");
+    } else {
+        // Enviar dados para o Flask
+        fetch('/processar_dados2', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userInput2: userInputValue2,
+                quantidadePalavras2: quantidadePalavrasValue2
+                // Adicione mais campos conforme necessário
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Obter a resposta da API
+            var respostaAPI2 = data.response_message;
+
+            // Exibir a resposta na variável respostaAPI2
+            console.log("Resposta da API:", respostaAPI2);
+
+            // Exibir a resposta no campo de saída
+            saida.value += '\n' + "You: " + userInput2.value + '\n' + "A quantidade máxima de palavras foi de: " + quantidadePalavras2.value + '\n' + '\n' +"Resposta: " + respostaAPI2 + '\n';
+        })
+        .catch(error => {
+            console.error('Erro ao enviar dados para o Flask:', error);
+        });
+    }
+});
+
+
+//Botão do prompt3
+btEnviar3.addEventListener("click", () => {
+    // Obter valores dos inputs
+    var userInputValue3 = userInput3.value;
+    var quantidadePalavrasValue3 = quantidadePalavras3.value;
+
+    // Validar dados
+    if (userInputValue3.trim() === "" || quantidadePalavrasValue3.trim() === "") {
+        // Lógica para lidar com campos vazios
+        alert("Por favor, preencha todos os campos.");
+    } else if (isNaN(quantidadePalavrasValue3)) {
+        // Lógica para lidar com quantidade de palavras inválida
+        alert("A quantidade de palavras não foi inserida corretamente.");
+    } else {
+        // Enviar dados para o Flask
+        fetch('/processar_dados3', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userInput3: userInputValue3,
+                quantidadePalavras3: quantidadePalavrasValue3
+                // Adicione mais campos conforme necessário
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Obter a resposta da API
+            var respostaAPI3 = data.response_message;
+
+            // Exibir a resposta na variável respostaAPI3
+            console.log("Resposta da API:", respostaAPI3);
+
+            // Exibir a resposta no campo de saída
+            saida.value += '\n' + "You: " + userInput3.value + '\n' + "A quantidade máxima de palavras foi de: " + quantidadePalavras3.value + '\n' + '\n' +"Resposta: " + respostaAPI3 + '\n';
+        })
+        .catch(error => {
+            console.error('Erro ao enviar dados para o Flask:', error);
+        });
+    }
+});
+
+
+
+//Botão do prompt4
+btEnviar4.addEventListener("click", () => {
+    // Obter valores dos inputs
+    var userInputValue4 = userInput4.value;
+    var quantidadePalavrasValue4 = quantidadePalavras4.value;
+
+    // Validar dados
+    if (userInputValue4.trim() === "" || quantidadePalavrasValue4.trim() === "") {
+        // Lógica para lidar com campos vazios
+        alert("Por favor, preencha todos os campos.");
+    } else if (isNaN(quantidadePalavrasValue4)) {
+        // Lógica para lidar com quantidade de palavras inválida
+        alert("A quantidade de palavras não foi inserida corretamente.");
+    } else {
+        // Enviar dados para o Flask
+        fetch('/processar_dados4', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userInput4: userInputValue4,
+                quantidadePalavras4: quantidadePalavrasValue4
+                // Adicione mais campos conforme necessário
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Obter a resposta da API
+            var respostaAPI4 = data.response_message;
+
+            // Exibir a resposta na variável respostaAPI4
+            console.log("Resposta da API:", respostaAPI4);
+
+            // Exibir a resposta no campo de saída
+            saida.value += '\n' + "You: " + userInput4.value + '\n' + "A quantidade máxima de palavras foi de: " + quantidadePalavras4.value + '\n' + '\n' +"Resposta: " + respostaAPI4 + '\n';
+        })
+        .catch(error => {
+            console.error('Erro ao enviar dados para o Flask:', error);
+        });
+    }
+});
+ 
+ 
+        function openPrompt(id) {
+            document.getElementById(id).value = '';//quando o prompt for chamado ele virá limpo
+            //document.getElementById('areaTexto').value = ''
+            
+            document.getElementById(id).style.display = 'block';
+
+
+        }
+ 
+        function submitPrompt() {
+            // Fechar a caixa de prompt após o processamento
+            const userInput = document.getElementById('userInput').value;
+            const quantidadePalavras = document.getElementById('quantidadePalavras').value;
+            document.getElementById('prompt-container1').style.display = 'none';
+            document.getElementById('prompt-container2').style.display = 'none';
+            document.getElementById('prompt-container3').style.display = 'none';
+            document.getElementById('prompt-container4').style.display = 'none';
+        
+            // Exibir a tela de carregamento
+            document.getElementById('loading-screen').style.display = 'flex';
+        
+            // Simular uma operação de 2 segundos
+            setTimeout(function () {
+                // Ocultar a tela de carregamento quando a operação estiver concluída
+                document.getElementById('loading-screen').style.display = 'none';
+            }, 2000);
+        
+            // Chamar o prompt novamente após o carregamento (opcional)
+            setTimeout(function () {
+                document.getElementById('loading-screen').style.display = 'none';
+                openPrompt(); // Chamando o prompt novamente após o carregamento
+            }, 2000);
+        }
+            // Adicione o evento de clique a cada serviço
+            document.querySelectorAll('.groupServiços > section').forEach((service, index) => {
+                service.addEventListener('click', () => {
+                    openPrompt('prompt-container' + (index + 1)); // Chama o prompt correspondente ao serviço clicado
+                });
+            });
+
+
+
+
+
+// Modifique a função submitPrompt para aceitar um parâmetro ID
+function submitPrompt(id) {
+    // Feche todos os containers de prompt
+    document.querySelectorAll('[id^="prompt-container"]').forEach(container => {
+        container.style.display = 'none';
+    });
+
+    // Exiba a tela de carregamento
+    document.getElementById('loading-screen').style.display = 'flex';
+
+    // Simule uma operação por 2 segundos
+    setTimeout(() => {
+        // Oculte a tela de carregamento após a operação
+        document.getElementById('loading-screen').style.display = 'none';
+
+        // Chame openPrompt após a operação (opcional)
+        openPrompt(id);
+    }, 2000);
+
+    // Crie um objeto com os dados a serem enviados para o Flask
+    const formData = {
+        //userInput: document.getElementById('userInput' + id).value,
+        //quantidadePalavras: document.getElementById('quantidadePalavras' + id).value
+        userInput: userInput,
+            quantidadePalavras: quantidadePalavras
+        // Adicione mais campos conforme necessário
+    };
+
+    // Envie uma solicitação POST para o Flask
+    fetch('/home', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Faça algo com a resposta do Flask, se necessário
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Erro ao enviar dados para o Flask:', error);
+    });
+
+    
+}
+
+
+
+
+
+// Modify the openPrompt function to accept an ID parameter
+function openPrompt(id) {
+    // Clear input and display prompt container
+    document.getElementById(id).querySelector('input[type="text"]').value = '';
+    document.getElementById(id).style.display = 'block';
+}
+
+// Add event listener to each service
+document.querySelectorAll('.groupServiços > section').forEach((service, index) => {
+    service.addEventListener('click', () => {
+        const containerId = 'prompt-container' + (index + 1);
+        submitPrompt(containerId); // Call submitPrompt with corresponding container ID
+    });
+});
+
+//teste para flask
+fetch('/home', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        userInput1: userInput1.value,
+        quantidadePalavras1: quantidadePalavras1.value,
+        userInput2: userInput2.value,
+        quantidadePalavras2: quantidadePalavras2.value,
+        userInput3: userInput3.value,
+        quantidadePalavras3: quantidadePalavras3.value,
+        userInput4: userInput4.value,
+        quantidadePalavras4: quantidadePalavras4.value,
+        
+    }),
+})
+.then(response => response.json())
+.then(data => {
+    // Faça algo com a resposta do Flask, se necessário
+    console.log(data);
+})
+.catch(error => {
+    console.error('Erro ao enviar dados para o Flask:', error);
+});
+
+</script>
+ 
+</body>
+</html>
